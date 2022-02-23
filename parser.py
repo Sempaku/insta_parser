@@ -27,10 +27,9 @@ if business_check is True:
 
 
 # Auth in Instagram
-'''
+
 username = input("Login: ")
 inst.interactive_login(username)
-'''
 
 
 def down_avatar(target):  # Download Profile_picture (no auth)
@@ -44,9 +43,13 @@ def down_posts(target):
 
 
 def target_followers():  # View target followers (auth)
+    f = open(f'{target}_followers.txt', 'w+')
     followers = profile.get_followers()
     for follower in followers:
+        fol = str(follower)
         print(follower)
+        f.write('\n' + fol[8:-1] + '\n')
+    f.close()
 
 
 # def down_posts(target):
@@ -66,5 +69,5 @@ def target_followers():  # View target followers (auth)
 #
 # down_avatar(target)
 # down_posts(target)
-# target_followers()
-#down_posts(target)
+target_followers()
+# down_posts(target)
