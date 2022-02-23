@@ -1,11 +1,23 @@
-# TODO: 1)target_followers --> add output in file
+# TODO: 1)target_followers --> add output in file +
 #       2)
-
+import colorama
+from colorama import Fore, Style, Back
+from termcolor import cprint, colored
 import instaloader
 inst = instaloader.Instaloader()
+colorama.init()
+logo = """
+  ___           _            ____
+ |_ _|_ __  ___| |_ __ _    |  _ \ __ _ _ __ ___  ___ _ __
+  | || '_ \/ __| __/ _` |   | |_) / _` | '__/ __|/ _ \ '__|
+  | || | | \__ \ || (_| |   |  __/ (_| | |  \__ \  __/ |
+ |___|_| |_|___/\__\__,_|   |_|   \__,_|_|  |___/\___|_|
+"""
 
+cprint(logo, 'cyan')
 
 # Input targer nickname
+print(Fore.BLUE + Style.BRIGHT)
 target = input("Enter target username:")
 
 
@@ -20,10 +32,11 @@ verify = "VERIFIED" if verify_check is True else "UNVERIFIED"
 privacy = "PRIVATE" if private_check is True else "UNPRIVATE"
 business = "BUSINESS" if business_check is True else "FREE"
 
-print(f"{target} have {privacy},{verify},{business} account.")
+print(f"{colored(target,'red')} have {colored(privacy,'red')},{colored(verify,'red')},{colored(business,'red')} account.")
 if business_check is True:
     business_name = profile.business_category_name
-    print(f"Business name: {business_name}")
+    print(f"Business name: {colored(business_name,'red')}")
+print(Fore.BLUE + Style.BRIGHT)
 
 
 # Auth in Instagram
@@ -47,13 +60,9 @@ def target_followers():  # View target followers (auth)
     followers = profile.get_followers()
     for follower in followers:
         fol = str(follower)
-        print(follower)
+        print(Fore.LIGHTGREEN_EX + fol[8:-1])
         f.write('\n' + fol[8:-1] + '\n')
     f.close()
-
-
-# def down_posts(target):
-#   inst.download_post(~~~~~~~~~~)
 
 
 # inst.dirname_pattern()
