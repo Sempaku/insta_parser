@@ -49,8 +49,7 @@ def target_followers():  # View target followers (auth)
         print(follower)
 
 
-# def down_posts(target):
-#   inst.download_post(~~~~~~~~~~)
+
 
 
 # inst.dirname_pattern()
