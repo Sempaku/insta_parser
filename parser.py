@@ -8,11 +8,12 @@
 #       8) full name (+)
 #       9) create folder TARGETS and mv all targets in dir
 
-import colorama
 from colorama import Fore, Style
 from termcolor import cprint, colored
 import instaloader
 from time import sleep
+
+
 inst = instaloader.Instaloader(save_metadata=False)
 colorama.init()
 logo = """
@@ -93,24 +94,33 @@ def target_followers():  # View target followers (auth)
 def general_pick():
     try:
         print(Fore.GREEN + """
-Menu:
-1)With authorization in Instagram
-2)Without authorization on Instagram
-0)Exit
+ Menu:
+ 1)With authorization in Instagram
+ 2)Without authorization on Instagram
+ 3)All
+ 0)Exit
               """)
 
-        general_choise = input("Input number:").lower()
+        general_choise = input("\nEnter number:").lower()
 
         if general_choise == "1":
             auth_pick()
         elif general_choise == "2":
             noauth_pick()
+        elif general_choise == "3":
+            auth()
+            down_avatar(target)
+            down_posts(target)
+            down_story()
+            target_followers()
+            print("\nFinish\n")
+            general_pick()
         elif general_choise == "0" or "exit" or "quit":
             exit("Bye!")
         else:
             print(Fore.RED + "Wrong input!"+Fore.GREEN)
             sleep(1)
-            general_choise()
+            general_pick()
     except(ValueError, TypeError):
         print(Fore.RED + "Error!"+Fore.GREEN)
         sleep(1)
@@ -120,13 +130,65 @@ Menu:
 def auth_pick():
     try:
         auth()
-    except:
-        pass
+        print("""
+ 1)Download stories
+ 2)Download followers --> file
+ 99)Back
+ 0)Exit
+        """)
+        auth_choise = input("\nEnter number: ").lower()
+        if auth_choise == 1:
+            down_story()
+            auth_pick()
+        elif auth_choise == 2:
+            target_followers()
+            auth_pick()
+        elif auth() == "99":
+            general_pick()
+            auth_pick()
+        elif auth_choise == "0" or "exit" or "quit":
+            exit("Bye!")
+        else:
+            print(Fore.RED + "Wrong input!" + Fore.GREEN)
+            sleep(1)
+            auth_pick()
+
+    except(ValueError, TypeError):
+        print(Fore.RED + "Error!" + Fore.GREEN)
+        sleep(1)
+        auth_pick()
+        
 
 
 def noauth_pick():
-    print("noauth_pick")
+    try:
+        print("""
+ 1)Download profile picture
+ 2)Download posts
+ 99)Back
+ 0)Exit
+        """)
+        noauth_choise = input("\nEnter number: ").lower()
+        if noauth_choise == "1":
+            down_avatar(target)
+            noauth_pick()
+        elif noauth_choise == "2":
+            down_posts(target)
+            noauth_pick()
+        elif noauth_choise == "99":
+            general_pick()
+            noauth_pick()
+        elif noauth_choise == "0":
+            exit("Bye!")
+        else:
+            print(Fore.RED + "Wrong input!" + Fore.GREEN)
+            sleep(1)
+            noauth_pick()
+        
+    except(ValueError,TypeError):
+        print(Fore.RED + "Error!" + Fore.GREEN)
+        sleep(1)
+        noauth_pick()
 
 
-'''general_pick()'''
-# inst.dirname_pattern()
+general_pick()
