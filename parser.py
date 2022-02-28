@@ -13,9 +13,9 @@ from termcolor import cprint, colored
 import instaloader
 from time import sleep
 
-
+auth_flag = False
 inst = instaloader.Instaloader(save_metadata=False)
-colorama.init()
+#colorama.init()
 logo = """
   ___           _            ____
  |_ _|_ __  ___| |_ __ _    |  _ \ __ _ _ __ ___  ___ _ __
@@ -60,9 +60,14 @@ print(Fore.GREEN + Style.BRIGHT)
 
 
 def auth():  # Auth in Instagram
-    username = input(Fore.LIGHTGREEN_EX + "Login: ")
-    inst.interactive_login(username + Fore.GREEN)
-
+    auth_flag = True
+    try:
+        
+        username = input(Fore.LIGHTGREEN_EX + "Login: ")
+        inst.interactive_login(username)
+        
+    except:
+        auth()
 
 def down_story():  # Download stories (auth)
     inst.get_stories(id)
@@ -104,7 +109,7 @@ def general_pick():
         general_choise = input("\nEnter number:").lower()
 
         if general_choise == "1":
-            auth_pick()
+            auth_pick(auth_flag)
         elif general_choise == "2":
             noauth_pick()
         elif general_choise == "3":
@@ -123,13 +128,17 @@ def general_pick():
             general_pick()
     except(ValueError, TypeError):
         print(Fore.RED + "Error!"+Fore.GREEN)
+        print(Exception())
         sleep(1)
         general_pick()
 
 
-def auth_pick():
+def auth_pick(auth_flag):
     try:
-        auth()
+        if auth_flag is False:
+            auth_flag = True
+            auth()
+        else: pass
         print("""
  1)Download stories
  2)Download followers --> file
@@ -137,10 +146,10 @@ def auth_pick():
  0)Exit
         """)
         auth_choise = input("\nEnter number: ").lower()
-        if auth_choise == 1:
+        if auth_choise == "1":
             down_story()
             auth_pick()
-        elif auth_choise == 2:
+        elif auth_choise == "2":
             target_followers()
             auth_pick()
         elif auth() == "99":
