@@ -58,15 +58,19 @@ if bio_target != "":
     print(f"Profile biography:\n{colored(bio_target,'red')}")
 print(Fore.GREEN + Style.BRIGHT)
 
-
-def auth():  # Auth in Instagram
-    auth_flag = True
+key = None
+def auth():  # Auth in Instagra
     try:
-        
-        username = input(Fore.LIGHTGREEN_EX + "Login: ")
+        global key
+        key = True
+        username = input("Login: ")
         inst.interactive_login(username)
+        return key
         
-    except:
+    except Exception as e:
+        key = False
+        print(f"Error --> {e}")
+        return key
         auth()
 
 def down_story():  # Download stories (auth)
@@ -80,6 +84,8 @@ def down_story():  # Download stories (auth)
 def down_avatar(target):  # Download profile picture (no auth)
     inst.download_profile(target, profile_pic_only=True,)
 
+def down_target_stories(target):
+    inst.download_profile(target, download_stories_only=True)
 
 def down_posts(target):  # Download posts (no auth)
     for post in profile.get_posts():
@@ -91,7 +97,7 @@ def target_followers():  # View target followers (auth)
     followers = profile.get_followers()
     for follower in followers:
         fol = str(follower)
-        print(Fore.LIGHTGREEN_EX + fol[8:-1])
+        print(Fore.CYAN + fol[8:-1] + Fore.GREEN)
         f.write('\n' + fol[8:-1] + '\n')
     f.close()
 
@@ -107,65 +113,67 @@ def general_pick():
               """)
 
         general_choise = input("\nEnter number:").lower()
-
         if general_choise == "1":
-            auth_pick(auth_flag)
+            auth_pick(key)
         elif general_choise == "2":
             noauth_pick()
         elif general_choise == "3":
             auth()
             down_avatar(target)
             down_posts(target)
-            down_story()
+            down_target_stories(target)
             target_followers()
             print("\nFinish\n")
             general_pick()
-        elif general_choise == "0" or "exit" or "quit":
+        elif general_choise == "0":
             exit("Bye!")
         else:
-            print(Fore.RED + "Wrong input!"+Fore.GREEN)
+            print(f"{Fore.RED}Wrong input!{Fore.GREEN}")
             sleep(1)
             general_pick()
-    except(ValueError, TypeError):
-        print(Fore.RED + "Error!"+Fore.GREEN)
-        print(Exception())
+    except Exception as e:
+        print(f"{Fore.RED} Error! --> {e} {Fore.GREEN}")
         sleep(1)
         general_pick()
 
 
-def auth_pick(auth_flag):
+def auth_pick(key):
     try:
-        if auth_flag is False:
-            auth_flag = True
+        if key is True:
+            cprint("Auth is True",'blue')
+            
+        else: 
             auth()
-        else: pass
         print("""
- 1)Download stories
+ 1)Download stories your followes
  2)Download followers --> file
+ 3)Download target stories
  99)Back
  0)Exit
         """)
         auth_choise = input("\nEnter number: ").lower()
         if auth_choise == "1":
             down_story()
-            auth_pick()
+            auth_pick(key)
         elif auth_choise == "2":
             target_followers()
-            auth_pick()
-        elif auth() == "99":
+            auth_pick(key)
+        elif auth_choise == "3":
+            down_target_stories(target)
+            auth_pick(key)
+        elif auth_choise == "99":
             general_pick()
-            auth_pick()
-        elif auth_choise == "0" or "exit" or "quit":
+        elif auth_choise == "0":
             exit("Bye!")
         else:
-            print(Fore.RED + "Wrong input!" + Fore.GREEN)
+            print(f"{Fore.RED}Wrong input!{Fore.GREEN}")
             sleep(1)
-            auth_pick()
+            auth_pick(key)
 
-    except(ValueError, TypeError):
-        print(Fore.RED + "Error!" + Fore.GREEN)
+    except Exception as e:
+        print(f"{Fore.RED}Error! --> {e}{Fore.GREEN}")
         sleep(1)
-        auth_pick()
+        general_pick()
         
 
 
@@ -186,16 +194,15 @@ def noauth_pick():
             noauth_pick()
         elif noauth_choise == "99":
             general_pick()
-            noauth_pick()
         elif noauth_choise == "0":
             exit("Bye!")
         else:
-            print(Fore.RED + "Wrong input!" + Fore.GREEN)
+            print(f"{Fore.RED}Wrong input!{Fore.GREEN}")
             sleep(1)
             noauth_pick()
         
-    except(ValueError,TypeError):
-        print(Fore.RED + "Error!" + Fore.GREEN)
+    except Exception as e:
+        print(f"{Fore.RED}Error! --> {e}{Fore.GREEN}")
         sleep(1)
         noauth_pick()
 
