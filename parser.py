@@ -15,7 +15,7 @@ from time import sleep
 
 auth_flag = False
 inst = instaloader.Instaloader(save_metadata=False)
-#colorama.init()
+
 logo = """
   ___           _            ____
  |_ _|_ __  ___| |_ __ _    |  _ \ __ _ _ __ ___  ___ _ __
@@ -73,7 +73,7 @@ def auth():  # Auth in Instagra
         return key
         auth()
 
-def down_story():  # Download stories (auth)
+def down_story():  # Download stories --> your profile followees (auth)
     inst.get_stories(id)
     inst.download_stories()
     for story in inst.get_stories():  # story is a Story object
